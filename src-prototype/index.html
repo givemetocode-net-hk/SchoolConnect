@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校園全通 EduConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .chat-bubble-mine {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 18px 18px 2px 18px;
+        }
+        .chat-bubble-others {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            border-radius: 18px 18px 18px 2px;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- 頂部標題列 -->
+    <header id="app-header" class="bg-white border-b px-4 py-3 flex justify-between items-center z-10">
+        <h1 id="page-title" class="text-xl font-bold text-blue-600">校園全通</h1>
+        <div class="flex gap-4">
+            <button onclick="toggleNotification()" class="text-gray-500 hover:text-blue-600">
+                <i class="fa-regular fa-bell text-xl"></i>
+            </button>
+            <button onclick="showProfile()" class="text-gray-500 hover:text-blue-600">
+                <i class="fa-regular fa-circle-user text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main id="main-content" class="flex-1 overflow-y-auto hide-scrollbar pb-20">
+        
+        <!-- 頁面 1: 聊天功能 -->
+        <section id="page-chat" class="p-4 space-y-4">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-lg font-bold">訊息中心</h2>
+                <button onclick="openCreateGroup()" class="text-sm bg-blue-500 text-white px-3 py-1 rounded-full">
+                    <i class="fa-solid fa-plus mr-1"></i> 創建群組
+                </button>
+            </div>
+            
+            <div class="space-y-1">
+                <!-- 聊天列表項目 -->
+                <div onclick="openConversation('張老師', 'teacher')" class="flex items-center p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-gray-50">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">張</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <span class="font-medium">張老師 (班導師)</span>
+                            <span class="text-xs text-gray-400">10:25 AM</span>
+                        </div>
+                        <p class="text-sm text-gray-500 truncate">記得交今天的數學作業...</p>
+                    </div>
+                </div>
+
+                <div onclick="openConversation('3年2班 同樂會群組', 'group')" class="flex items-center p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-gray-50">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold mr-3">群</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <span class="font-medium">3年2班 同樂會群組</span>
+                            <span class="text-xs text-gray-400">昨天</span>
+                        </div>
+                        <p class="text-sm text-gray-500 truncate">王小明: 我可以帶洋芋片！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 頁面 2: 今日作業 -->
+        <section id="page-homework" class="p-4 space-y-4 hidden">
+            <h2 class="text-lg font-bold">今日作業 (2026-04-01)</h2>
+            <div class="space-y-3">
+                <div class="p-4 bg-white rounded-xl shadow-sm border-l-4 border-red-500">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-gray-800">數學：習作 P.45-P.47</h3>
+                        <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded">待繳交</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">需拍上傳至學習平台</p>
+                    <div class="mt-3 text-xs text-gray-400 flex items-center">
+                        <i class="fa-regular fa-clock mr-1"></i> 截止時間：今日 23:59
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-xl shadow-sm border-l-4 border-blue-500">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-gray-800">國文：背誦《琵琶行》第一段</h3>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">進行中</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">明天課堂抽測</p>
+                </div>
+
+                <div class="p-4 bg-white rounded-xl shadow-sm border-l-4 border-green-500 opacity-70">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-gray-800 line-through">英文：單字 L5 練習題</h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded">已完成</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 頁面 3: 電子書 -->
+        <section id="page-ebook" class="p-4 space-y-4 hidden">
+            <h2 class="text-lg font-bold">我的圖書室</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- 電子書項目 -->
+                <div onclick="viewBook('國文課本 第五冊')" class="bg-white p-3 rounded-xl shadow-sm cursor-pointer hover:ring-2 hover:ring-blue-300">
+                    <div class="aspect-[3/4] bg-orange-100 rounded-lg flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-book-open text-4xl text-orange-400"></i>
+                    </div>
+                    <p class="text-sm font-medium text-center">國文課本 第五冊</p>
+                    <p class="text-[10px] text-gray-400 text-center">PDF | 24.5MB</p>
+                </div>
+
+                <div onclick="viewBook('數學講義 - 空間幾何')" class="bg-white p-3 rounded-xl shadow-sm cursor-pointer hover:ring-2 hover:ring-blue-300">
+                    <div class="aspect-[3/4] bg-blue-100 rounded-lg flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-file-pdf text-4xl text-blue-400"></i>
+                    </div>
+                    <p class="text-sm font-medium text-center">數學講義 - 空間幾何</p>
+                    <p class="text-[10px] text-gray-400 text-center">PDF | 8.2MB</p>
+                </div>
+
+                <div onclick="viewBook('校慶活動企劃書')" class="bg-white p-3 rounded-xl shadow-sm cursor-pointer hover:ring-2 hover:ring-blue-300">
+                    <div class="aspect-[3/4] bg-green-100 rounded-lg flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-file-lines text-4xl text-green-400"></i>
+                    </div>
+                    <p class="text-sm font-medium text-center">校慶活動企劃書</p>
+                    <p class="text-[10px] text-gray-400 text-center">DOCX | 1.1MB</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 聊天對話框 Overlay (隱藏) -->
+    <div id="chat-overlay" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <header class="p-4 border-b flex items-center">
+            <button onclick="closeConversation()" class="mr-4 text-gray-600">
+                <i class="fa-solid fa-chevron-left text-xl"></i>
+            </button>
+            <div id="chat-target-info" class="flex-1 font-bold text-lg">對話標題</div>
+            <button class="text-gray-500"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </header>
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <!-- 模擬對話內容 -->
+            <div class="flex justify-start">
+                <div class="chat-bubble-others p-3 max-w-[80%] shadow-sm text-sm">
+                    你好！關於今天的作業有疑問嗎？
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <div class="chat-bubble-mine p-3 max-w-[80%] shadow-sm text-sm">
+                    老師好，想請問數學課本 46 頁的第三題怎麼寫？
+                </div>
+            </div>
+        </div>
+        <div class="p-3 border-t bg-white safe-area-bottom">
+            <div class="flex gap-2 items-center">
+                <button class="text-gray-400 px-2"><i class="fa-solid fa-circle-plus text-xl"></i></button>
+                <input type="text" id="chat-input" placeholder="輸入訊息..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400">
+                <button onclick="sendMessage()" class="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 電子書閱讀器 Overlay (模擬) -->
+    <div id="reader-overlay" class="fixed inset-0 bg-black z-50 hidden flex flex-col">
+        <header class="p-4 bg-zinc-900 text-white flex justify-between items-center">
+            <button onclick="closeReader()"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <span id="book-title" class="text-sm font-medium">電子書閱讀</span>
+            <div class="flex gap-4">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-bookmark"></i>
+            </div>
+        </header>
+        <div class="flex-1 flex items-center justify-center bg-zinc-800 overflow-hidden relative">
+            <div class="w-[90%] h-[80%] bg-white shadow-2xl flex flex-col items-center justify-center text-gray-300">
+                <i class="fa-solid fa-file-pdf text-6xl mb-4"></i>
+                <p>PDF 預覽內容區塊</p>
+                <p class="text-xs mt-2">模擬文件顯示頁面...</p>
+            </div>
+            <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
+                <button class="bg-zinc-700/80 text-white px-4 py-2 rounded-full text-xs">上一頁</button>
+                <span class="text-white text-xs self-center">1 / 128</span>
+                <button class="bg-zinc-700/80 text-white px-4 py-2 rounded-full text-xs">下一頁</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部導覽列 -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center py-2 safe-area-bottom shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+        <button onclick="switchPage('chat')" id="nav-chat" class="flex flex-col items-center gap-1 text-blue-600">
+            <i class="fa-solid fa-comment-dots text-xl"></i>
+            <span class="text-[10px]">溝通</span>
+        </button>
+        <button onclick="switchPage('homework')" id="nav-homework" class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fa-solid fa-list-check text-xl"></i>
+            <span class="text-[10px]">作業</span>
+        </button>
+        <button onclick="switchPage('ebook')" id="nav-ebook" class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fa-solid fa-book text-xl"></i>
+            <span class="text-[10px]">電子書</span>
+        </button>
+    </nav>
+
+    <!-- 簡單通知 UI -->
+    <div id="toast" class="fixed top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full text-sm opacity-0 pointer-events-none transition-opacity duration-300 z-[100]">
+        訊息已發送
+    </div>
+
+    <script>
+        // 頁面切換邏輯
+        function switchPage(pageId) {
+            const pages = ['chat', 'homework', 'ebook'];
+            pages.forEach(p => {
+                document.getElementById(`page-${p}`).classList.add('hidden');
+                document.getElementById(`nav-${p}`).classList.remove('text-blue-600');
+                document.getElementById(`nav-${p}`).classList.add('text-gray-400');
+            });
+
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+            document.getElementById(`nav-${navIdMap[pageId] || pageId}`).classList.add('text-blue-600');
+            document.getElementById(`nav-${navIdMap[pageId] || pageId}`).classList.remove('text-gray-400');
+
+            // 更改標題
+            const titleMap = {
+                'chat': '校園全通',
+                'homework': '今日作業',
+                'ebook': '圖書閱覽'
+            };
+            document.getElementById('page-title').innerText = titleMap[pageId];
+        }
+
+        const navIdMap = {
+            'chat': 'chat',
+            'homework': 'homework',
+            'ebook': 'ebook'
+        };
+
+        // 聊天對話
+        function openConversation(name, type) {
+            document.getElementById('chat-target-info').innerText = name;
+            document.getElementById('chat-overlay').classList.remove('translate-x-full');
+        }
+
+        function closeConversation() {
+            document.getElementById('chat-overlay').classList.add('translate-x-full');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            if (!input.value.trim()) return;
+
+            const msgContainer = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'flex justify-end';
+            msgDiv.innerHTML = `
+                <div class="chat-bubble-mine p-3 max-w-[80%] shadow-sm text-sm">
+                    ${input.value}
+                </div>
+            `;
+            msgContainer.appendChild(msgDiv);
+            input.value = '';
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            showToast('訊息已發送');
+        }
+
+        // 創建群組 (模擬)
+        function openCreateGroup() {
+            showToast('正在開啟群組創建介面...');
+        }
+
+        // 電子書閱覽
+        function viewBook(title) {
+            document.getElementById('book-title').innerText = title;
+            document.getElementById('reader-overlay').classList.remove('hidden');
+        }
+
+        function closeReader() {
+            document.getElementById('reader-overlay').classList.add('hidden');
+        }
+
+        // 其他功能
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.innerText = text;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
+        }
+
+        function toggleNotification() {
+            showToast('目前沒有新通知');
+        }
+
+        function showProfile() {
+            showToast('個人資訊功能建置中');
+        }
+
+        // 監聽 Enter 鍵發送訊息
+        document.getElementById('chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
